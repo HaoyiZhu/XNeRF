@@ -1,0 +1,5 @@
+name: single_scene
+type: XNeRFSingleScene
+root: './data'
+scene_id: 1
+novel_view_indexes: [6]

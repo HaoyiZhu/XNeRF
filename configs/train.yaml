@@ -1,0 +1,75 @@
+defaults:
+  - _self_
+  - dataset: multi_scene
+
+exp_id: default
+snapshot: 2   # how often to take a snapshot of the model (0 = never)
+work_dir: ./exp/${dataset.type}/${dataset.name}-${exp_id}/
+trainIters: 0   # current training iteration number
+
+data_preset:
+  alpha_init: 0.005
+  alpha_thr: 0.0005
+  downsample_voxel_size_m: 0.004
+  smooth_pcd:   # deprecated
+    apply: false
+    filter_num_neighbor: 10
+    filter_std_ratio: 0.01
+    filter_radius_m: 2.0
+  min_depth: 0.01
+  max_depth: 3.0
+  keep_region:  # optional, whether to set keep region for pruning layers
+    apply: true
+    margin: 0.012
+  voxel_size: 0.003
+  step_size: 0.5
+  rot_p: 0.15
+  patch_sample: true
+  x_range: [-1.65, 1.85]
+  y_range: [-2.0, 0.9]
+  z_range: [-0.4, 0.7]
+
+model:
+  type: MinkUNet14
+  in_channels: 3  # r, g, b
+  out_channels: 4  # sigma, r, g, b
+  expand_coordinates: false
+  pretrained: ''
+  try_load: ''
+  is_prune: ${preset.keep_region.apply}    # whether to apply pruning layers
+  sh_deg: 2
+  num_stage: 2
+  
+loss:
+  type: Criterion
+  use_perceptual_loss: true
+  use_tv_loss: false
+  use_sn_loss: false
+  weight:
+    perceptual: 1.0
+    depth: 0.1
+    tv: 0.0
+    sn: 0.0
+
+train:
+  ray_batch_size: 30720   # only useful when $data_preset.patch_sample is false
+  patch_size:   # only useful when $data_preset.patch_sample is true
+    - 40
+    - 40
+  begin_epoch: 0
+  end_epoch: 240
+  optimizer: 'adamw'
+  weight_decay: 1e-5
+  lr: 1e-2
+  lr_factor: 0.1
+  lr_step:
+    - 120
+    - 180
+
+val:
+  ray_batch_size: 40960
+
+hydra:
+  run:
+    dir: .
+  output_subdir: null
