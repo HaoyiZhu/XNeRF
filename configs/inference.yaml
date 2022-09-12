@@ -1,0 +1,48 @@
+defaults:
+  - _self_
+  - dataset: multi_scene
+
+exp_id: default
+work_dir: ./exp/${dataset.type}/${dataset.name}-${exp_id}/
+ckpt_path: ${work_dir}/ckpt.pth
+
+data_preset:
+  alpha_init: 0.005
+  alpha_thr: 0.0005
+  downsample_voxel_size_m: 0.004
+  smooth_pcd:   # deprecated
+    apply: false
+    filter_num_neighbor: 10
+    filter_std_ratio: 0.01
+    filter_radius_m: 2.0
+  min_depth: 0.01
+  max_depth: 3.0
+  keep_region:  # optional, whether to set keep region for pruning layers
+    apply: true
+    margin: 0.012
+  voxel_size: 0.003
+  step_size: 0.5
+  x_range: [-1.65, 1.85]
+  y_range: [-2.0, 0.9]
+  z_range: [-0.4, 0.7]
+  N_views: 20
+  N_rots: 1
+  rads: [0.05, 0.05, 0.05]
+
+model:
+  type: MinkUNet14
+  in_channels: 3  # r, g, b
+  out_channels: 4  # sigma, r, g, b
+  expand_coordinates: false
+  is_prune: ${preset.keep_region.apply}    # whether to apply pruning layers
+  sh_deg: 2
+  num_stage: 2
+  
+inference:
+  ray_batch_size: 40960
+  lazy_import: true
+
+hydra:
+  run:
+    dir: .
+  output_subdir: null
