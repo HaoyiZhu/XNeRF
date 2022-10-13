@@ -41,5 +41,11 @@ You can check our dataset in [./data/](./data/). The folder contains 10 scenes, 
 ## Pre-trained Weights
 You can download our pre-trained weight from [Google Drive](https://drive.google.com/file/d/1LZTQTIKmC36NufR9i0VR7uN1wdnPcNln/view?usp=sharing) or [Baidu Pan](https://pan.baidu.com/s/1wXAlqU6Su8GW4DZ0msn0sw?pwd=r8f4). To load the weight, you can set `ckpt_path={path/to/weight}` in the command.
 
+## TO DOs
+- [ ] Multi-gpu training
+- [ ] Reduce the memory consumption when training
+- [ ] More scenes
+- [ ] More backbones
+
 ## Acknowledgement
 The [CUDA extension](xnerf/utils/cuda/) for rendering is adapted from [DVGO](https://github.com/sunset1995/DirectVoxGO) and the [SH function](./xnerf/utils/render.py#L272) is adapted from [PlenOctrees](https://github.com/sxyu/plenoctree/blob/master/nerf_sh/nerf/sh.py).
