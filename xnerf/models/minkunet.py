@@ -13,7 +13,6 @@ from .layers.Resnet import BasicBlock, Bottleneck, ResNetBase
 
 class MinkUNetBase(ResNetBase):
     BLOCK = None
-    PLANES = None
     DILATIONS = (1, 1, 1, 1, 1, 1, 1, 1)
     LAYERS = (2, 2, 2, 2, 2, 2, 2, 2)
     PLANES = (96, 128, 256, 512, 256, 128, 96, 64)
