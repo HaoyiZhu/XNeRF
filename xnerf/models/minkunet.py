@@ -2,6 +2,8 @@
 # Written by Haoyi Zhu (zhuhaoyi@sjtu.edu.cn). All rights reserved.
 # Modified from https://github.com/NVIDIA/MinkowskiEngine/blob/master/examples/unet.py
 # ------------------------------------------------------------------------------
+import math
+
 import MinkowskiEngine as ME
 import torch
 import torch.nn as nn
@@ -34,11 +36,9 @@ class MinkUNetBase(ResNetBase):
             D=3,
         )
         self._preset_cfg = cfg["preset"]
-        self.alpha_init = torch.log(
-            1 / (1 - torch.Tensor([self._preset_cfg.alpha_init])) - 1
-        ).cuda()
-        self.interval = torch.Tensor([self._preset_cfg.step_size]).cuda()
-        self.alpha_thr = torch.Tensor([self._preset_cfg.alpha_thr * 0.1]).cuda()
+        self.alpha_init = math.log(1 / (1 - self._preset_cfg.alpha_init) - 1)
+        self.interval = self._preset_cfg.step_size
+        self.alpha_thr = self._preset_cfg.alpha_thr * 0.1
 
     def network_initialization(self, in_channels, out_channels, expand_coordinates, D):
         if self.sh_deg > 0:
